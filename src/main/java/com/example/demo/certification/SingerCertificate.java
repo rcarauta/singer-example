@@ -2,6 +2,7 @@ package com.example.demo.certification;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -9,6 +10,7 @@ import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.Signature;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -63,12 +65,15 @@ public class SingerCertificate {
 	}
 	
 	@GetMapping("/certificate")
-	public byte[] assinaturaCadesDetached(@PathVariable("path")String pathFileTxt, X509Certificate[] certificates, byte[] privateKey) throws Exception {
+	public byte[] assinaturaCadesDetached(@PathVariable("path")String pathFileTxt) throws Exception {
 		byte[] content = readContent(pathFileTxt);
+		X509Certificate[] certificates = new X509Certificate[1];
 		CAdESSigner singer = (CAdESSigner) PKCS7Factory.getInstance().factoryDefault();
+		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(readContent("/home/rcarauta/desenvolvimento/certificado/server.key"));
+		
+		certificates[0] = getCertificate();
 		singer.setCertificates(certificates);
-	
-		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKey);
+		
 		KeyFactory factory = KeyFactory.getInstance("RSA");
 		PrivateKey privKey = factory.generatePrivate(spec);
 		
@@ -76,6 +81,25 @@ public class SingerCertificate {
 		
 		return singer.doDetachedSign(content);
 		
+	}
+	
+	private X509Certificate getCertificate() throws IOException, Exception {
+		File certFile = new File("/home/rcarauta/desenvolvimento/certificado/ca.key");
+		InputStream inputStreamFile = new FileInputStream(certFile);	
+		BasicCertificate bc = new BasicCertificate(inputStreamFile);
+
+		System.out.println(bc.getName());
+		System.out.println(bc.getEmail());
+		System.out.println(bc.getSerialNumber());
+		
+		X509Certificate x509Certificate =(X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(inputStreamFile);
+		CertificateExtra ce = new CertificateExtra(x509Certificate);
+		
+		System.out.println(ce.getOID_2_16_76_1_3_1().getCPF());
+		System.out.println(ce.getOID_2_16_76_1_3_3().getCNPJ());
+		System.out.println(ce.getOID_2_16_76_1_3_2().getName());
+		
+		return x509Certificate;
 	}
 	
 	private byte[] readContent(String pathFileTxt) throws IOException {
