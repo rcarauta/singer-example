@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
+import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
@@ -74,13 +77,16 @@ public class SingerCertificate {
 		byte[] content = readContent(pathFileTxt);
 		X509Certificate[] certificates = new X509Certificate[1];
 		CAdESSigner singer = (CAdESSigner) new PKCS7Factory().factoryDefault();
-		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(readContent("/home/rcarauta/desenvolvimento/certificado/ca.crt"));
+		
+		KeyPair pair = generateKeyPair();
+		
+		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(pair.getPrivate().getEncoded());
 		
 		certificates[0] = getCertificate();
 		singer.setCertificates(certificates);
 		
 		KeyFactory factory = KeyFactory.getInstance("RSA");
-		RSAPrivateKey privKey = (RSAPrivateKey) factory.generatePrivate(spec);
+		PrivateKey privKey = factory.generatePrivate(spec);
 		
 		singer.setPrivateKey(privKey);
 		
@@ -88,30 +94,18 @@ public class SingerCertificate {
 		
 	}
 	
+	public  KeyPair generateKeyPair() throws Exception {
+	    KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+	    generator.initialize(2048, new SecureRandom());
+	    KeyPair pair = generator.generateKeyPair();
+	    return pair;
+	}
+	
 	private X509Certificate getCertificate() throws IOException, Exception {
-		String pathFile = "/home/rcarauta/desenvolvimento/certificado/ca.crt";
-		File certFile = new File(pathFile);
-		InputStream inputStreamFile = new FileInputStream(certFile);
+		String pathFile = "/home/renato/Downloads/mestrado/certificados/server.crt";
 		ByteArrayInputStream bytes = new ByteArrayInputStream(readContent(pathFile));
-		BasicCertificate bc = new BasicCertificate(inputStreamFile);
-		
-
-		System.out.println(bc.getNome());
-		System.out.println(bc.getEmail());
-		System.out.println(bc.getSerialNumber());
-		
-		CertificateFactory certFactory = CertificateFactory.getInstance("X.509");
-				
-		X509Certificate	x509Certificate = (X509Certificate) certFactory.generateCertificate(bytes);
-				
-		CertificateExtra ce = new CertificateExtra(x509Certificate);
-		
-		System.out.println(ce.getEmail());
-		System.out.println(ce.getOID_2_16_76_1_3_1());
-		System.out.println(ce.getOID_2_16_76_1_3_2());
-		System.out.println(ce.getOID_2_16_76_1_3_3());
-		
-		return x509Certificate;
+		CertificateFactory certFactory = CertificateFactory.getInstance("X.509");			
+		return (X509Certificate) certFactory.generateCertificate(bytes);
 	}
 	
 	private byte[] readContent(String pathFileTxt) throws IOException {
@@ -120,7 +114,7 @@ public class SingerCertificate {
 		  try {
 			  FileInputStream fis = new FileInputStream(file);
 			  fis.read(bytesArray); //read file into bytes[]
-			  fis.close();
+			  fis.close();a
 		  } catch(Exception e) {
 			  System.err.println(e);
 		  }*/	
