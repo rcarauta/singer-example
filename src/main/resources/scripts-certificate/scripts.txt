@@ -1,0 +1,5 @@
+openssl genrsa -des3 -out private.pem 2048
+
+openssl rsa -inform PEM -in private.pem -outform DER -pubout -out public.der
+
+openssl pkcs8 -topk8 -inform PEM -in private.pem -outform DER -nocrypt -out private.der
