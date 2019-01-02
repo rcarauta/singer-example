@@ -1,32 +1,17 @@
 package com.example.demo.certification;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Signature;
-import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-
-import javax.xml.bind.DatatypeConverter;
 
 import org.demoiselle.signer.core.CertificateManager;
 import org.demoiselle.signer.core.extension.BasicCertificate;
@@ -34,8 +19,6 @@ import org.demoiselle.signer.core.extension.CertificateExtra;
 import org.demoiselle.signer.core.repository.Configuration;
 import org.demoiselle.signer.policy.impl.cades.factory.PKCS7Factory;
 import org.demoiselle.signer.policy.impl.cades.pkcs7.impl.CAdESSigner;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,15 +69,19 @@ public class SingerCertificate {
 		X509Certificate[] certificates = new X509Certificate[1];
 		CAdESSigner singer = (CAdESSigner) new PKCS7Factory().factoryDefault();
 		
-		DataInputStream dis = new DataInputStream(new FileInputStream("/home/renato/Downloads/mestrado/certificados/private.der"));
+		DataInputStream dis = new DataInputStream(new FileInputStream("src/main/resources/certificados/private.der"));
 			
-		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(readContent("/home/renato/Downloads/mestrado/certificados/private.der"));
+		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(readContent("src/main/resources/certificados/private.der"));
 		
 		certificates[0] = getCertificate();
 		singer.setCertificates(certificates);
 		
 		KeyFactory factory = KeyFactory.getInstance("RSA");
 		PrivateKey privKey = factory.generatePrivate(spec);
+		
+		Configuration config = Configuration.getInstance();
+		config.setCrlPath("/usr/share/ca-certificates/");
+		config.setOnline(false);
 		
 		singer.setPrivateKey(privKey);
 		
@@ -104,22 +91,13 @@ public class SingerCertificate {
 	
 	
    private X509Certificate getCertificate() throws IOException, Exception {
-		String pathFile = "/home/renato/Downloads/mestrado/certificados/example.crt";
+		String pathFile = "src/main/resources/certificados/server.crt";
 		ByteArrayInputStream bytes = new ByteArrayInputStream(readContent(pathFile));
 		CertificateFactory certFactory = CertificateFactory.getInstance("X.509");			
 		return (X509Certificate) certFactory.generateCertificate(bytes);
 	}
 	
 	private byte[] readContent(String pathFileTxt) throws IOException {
-		  /*File file = new File(pathFileTxt);
-		  byte[] bytesArray = new byte[(int) file.length()]; 
-		  try {
-			  FileInputStream fis = new FileInputStream(file);
-			  fis.read(bytesArray); //read file into bytes[]
-			  fis.close();a
-		  } catch(Exception e) {
-			  System.err.println(e);
-		  }*/	
 		return Files.readAllBytes(new File(pathFileTxt).toPath());
 	}
 
