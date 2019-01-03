@@ -69,9 +69,9 @@ public class SingerCertificate {
 		X509Certificate[] certificates = new X509Certificate[1];
 		CAdESSigner singer = (CAdESSigner) new PKCS7Factory().factoryDefault();
 		
-		DataInputStream dis = new DataInputStream(new FileInputStream("src/main/resources/certificados/private.der"));
+		DataInputStream dis = new DataInputStream(new FileInputStream("/home/rcarauta/desenvolvimento/certificado/client.der"));
 			
-		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(readContent("src/main/resources/certificados/private.der"));
+		PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(readContent("/home/rcarauta/desenvolvimento/certificado/client.der"));
 		
 		certificates[0] = getCertificate();
 		singer.setCertificates(certificates);
@@ -80,8 +80,6 @@ public class SingerCertificate {
 		PrivateKey privKey = factory.generatePrivate(spec);
 		
 		Configuration config = Configuration.getInstance();
-		config.setCrlPath("/usr/share/ca-certificates/");
-		config.setOnline(false);
 		
 		singer.setPrivateKey(privKey);
 		
@@ -91,7 +89,7 @@ public class SingerCertificate {
 	
 	
    private X509Certificate getCertificate() throws IOException, Exception {
-		String pathFile = "src/main/resources/certificados/server.crt";
+		String pathFile = "/home/rcarauta/desenvolvimento/certificado/client.crt";
 		ByteArrayInputStream bytes = new ByteArrayInputStream(readContent(pathFile));
 		CertificateFactory certFactory = CertificateFactory.getInstance("X.509");			
 		return (X509Certificate) certFactory.generateCertificate(bytes);

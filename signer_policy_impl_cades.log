@@ -1,0 +1,15 @@
+2019-01-03 12:00:27 INFO  CAManager:200 - Procurando certificado no Provider: Provedor OFFLINE de cadeias ICP-Brasil  (icpbrasil.jks)
+2019-01-03 12:00:27 INFO  CAManager:234 - Foram encontrados 1 níveis na cadeia do provider Provedor OFFLINE de cadeias ICP-Brasil  (icpbrasil.jks) 
+2019-01-03 12:00:27 INFO  CAManager:242 - Não foi possivel montar a cadeia com o provider: Provedor OFFLINE de cadeias ICP-Brasil  (icpbrasil.jks)
+2019-01-03 12:00:27 INFO  CAManager:200 - Procurando certificado no Provider: Provedor OFFLINE de cadeias ICP-Brasil arquivo no diretorio local do usuário /home/rcarauta/.java/signer/ACcompactado.zip
+2019-01-03 12:00:27 INFO  CAManager:234 - Foram encontrados 1 níveis na cadeia do provider Provedor OFFLINE de cadeias ICP-Brasil arquivo no diretorio local do usuário /home/rcarauta/.java/signer/ACcompactado.zip 
+2019-01-03 12:00:27 INFO  CAManager:242 - Não foi possivel montar a cadeia com o provider: Provedor OFFLINE de cadeias ICP-Brasil arquivo no diretorio local do usuário /home/rcarauta/.java/signer/ACcompactado.zip
+2019-01-03 12:00:27 INFO  CAManager:200 - Procurando certificado no Provider: Provedor ONLINE de cadeias ICP-Brasil  do SERPRO (http://repositorio.serpro.gov.br/icp-brasil/ACcompactado.zip)
+2019-01-03 12:00:28 INFO  CAManager:234 - Foram encontrados 1 níveis na cadeia do provider Provedor ONLINE de cadeias ICP-Brasil  do SERPRO (http://repositorio.serpro.gov.br/icp-brasil/ACcompactado.zip) 
+2019-01-03 12:00:28 INFO  CAManager:242 - Não foi possivel montar a cadeia com o provider: Provedor ONLINE de cadeias ICP-Brasil  do SERPRO (http://repositorio.serpro.gov.br/icp-brasil/ACcompactado.zip)
+2019-01-03 12:00:28 INFO  CAManager:200 - Procurando certificado no Provider: Provedor ONLINE de cadeias ICP-Brasil  do ITI (http://acraiz.icpbrasil.gov.br/credenciadas/CertificadosAC-ICP-Brasil/ACcompactado.zip)
+2019-01-03 12:00:29 INFO  CAManager:234 - Foram encontrados 1 níveis na cadeia do provider Provedor ONLINE de cadeias ICP-Brasil  do ITI (http://acraiz.icpbrasil.gov.br/credenciadas/CertificadosAC-ICP-Brasil/ACcompactado.zip) 
+2019-01-03 12:00:29 INFO  CAManager:242 - Não foi possivel montar a cadeia com o provider: Provedor ONLINE de cadeias ICP-Brasil  do ITI (http://acraiz.icpbrasil.gov.br/credenciadas/CertificadosAC-ICP-Brasil/ACcompactado.zip)
+2019-01-03 12:00:29 INFO  CAManager:200 - Procurando certificado no Provider: Cadeias de certificados para ambientes de homologação do SERPRO
+2019-01-03 12:00:29 INFO  CAManager:234 - Foram encontrados 1 níveis na cadeia do provider Cadeias de certificados para ambientes de homologação do SERPRO 
+2019-01-03 12:00:29 INFO  CAManager:242 - Não foi possivel montar a cadeia com o provider: Cadeias de certificados para ambientes de homologação do SERPRO
